@@ -89,13 +89,23 @@ if (isset($update->message->sticker)) {
         $log->log(200, $update->message->sticker->file_id);
         $log->log(200, $filePath);
         $log->log(200, '==============');
-        $im = imagecreatefromwebp("{$filePath}");
-        $imgPath = './img_' . time() . '.png';
-        imagepng($im, $imgPath);
+
+
+
+        $fileName = './img_' . time();
+        $imgPathWebp = $fileName . '.webp';
+        $imgPathPng = $fileName . '.png';
+        copy(
+            $filePath,
+            $fileName . '.webp'
+        );
+        $im = imagecreatefromwebp($imgPathWebp);
+        imagepng($im, $imgPathPng);
         imagedestroy($im);
         $telegramApi->sendPhoto($update->message->chat->id, $imgPath);
 
-        unlink($imgPath);
+        unlink($imgPathPng);
+        unlink($imgPathWebp);
 
     } catch (\Exception $exception) {
         $telegramApi->sendMessage($update->message->chat->id, 'Sorry, I am tired. Some server error. Try in a few minutes :\'( ');
