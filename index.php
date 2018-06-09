@@ -25,7 +25,7 @@ $users = [];
 //if ('/bot' === $_SERVER['REQUEST_URI']) {
     file_put_contents('request_dump.html', $_REQUEST);
     file_put_contents('server_dump.html', $_SERVER);
-    file_put_contents('server_dump.html', $_POST);
+    file_put_contents('post_dump.html', $_POST);
     return true;
 //}
 
