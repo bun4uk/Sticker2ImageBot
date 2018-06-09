@@ -102,7 +102,7 @@ if (isset($update->message->sticker)) {
         $im = imagecreatefromwebp($imgPathWebp);
         imagepng($im, $imgPathPng);
         imagedestroy($im);
-        $telegramApi->sendPhoto($update->message->chat->id, $imgPath);
+        $telegramApi->sendPhoto($update->message->chat->id, $imgPathPng);
 
         unlink($imgPathPng);
         unlink($imgPathWebp);
