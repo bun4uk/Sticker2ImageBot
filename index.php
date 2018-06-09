@@ -22,11 +22,11 @@ $log->pushHandler(new StreamHandler('./img_log.log', 200));
 $users = [];
 
 
-if ('/bot' === $_SERVER['REQUEST_URI']) {
+//if ('/bot' === $_SERVER['REQUEST_URI']) {
     file_put_contents('request_dump.html', $_REQUEST);
     file_put_contents('server_dump.html', $_SERVER);
     return true;
-}
+//}
 
 die('exit');
 
