@@ -54,16 +54,23 @@ class TelegramBot
      */
     protected function query(string $method, array $params = []): stdClass
     {
-        $url = self::TELEGRAM_API_URL . $this->token . '/' . $method;
-        if (!empty($params)) {
-            $url .= '?' . http_build_query($params);
+        try {
+
+
+            $url = self::TELEGRAM_API_URL . $this->token . '/' . $method;
+            if (!empty($params)) {
+                $url .= '?' . http_build_query($params);
+            }
+            file_put_contents('query_log.txt', $url);
+            $client = new Client(['base_uri' => $url]);
+            $result = $client->request('GET');
+
+            $response = json_decode($result->getBody()->getContents());
+
+            return $response;
+        } catch (\Exception $exception) {
+            file_put_contents('query_error_log.txt', $exception->getMessage() . PHP_EOL . json_encode($exception->getTrace()));
         }
-        $client = new Client(['base_uri' => $url]);
-        $response = $client->request('GET');
-
-        file_put_contents('query_log.txt',json_decode($response->getBody()->getContents()));
-
-        return json_decode($response->getBody()->getContents());
     }
 
     /**
