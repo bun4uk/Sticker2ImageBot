@@ -58,7 +58,6 @@ class TelegramBot
         if (!empty($params)) {
             $url .= '?' . http_build_query($params);
         }
-
         $client = new Client(['base_uri' => $url]);
         $response = $client->request('GET');
 
