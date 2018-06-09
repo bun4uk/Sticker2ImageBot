@@ -3,5 +3,5 @@ composer.lock
 img_log.log
 request_dump.html
 server_dump.html
-stickerimg.php
 vendor/
+config.yml
