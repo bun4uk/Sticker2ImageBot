@@ -30,10 +30,6 @@ $request = json_decode($request);
 //    return true;
 //}
 
-//die('exit');
-
-//while (1) {
-//    $telegramApi->sendMessage(2666474, 'Привет, Макс!');
 
 $update = $request;
 
