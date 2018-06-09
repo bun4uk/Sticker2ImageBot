@@ -56,8 +56,6 @@ class TelegramBot
     protected function query(string $method, array $params = []): stdClass
     {
         try {
-
-
             $url = self::TELEGRAM_API_URL . $this->token . '/' . $method;
             if (!empty($params)) {
                 $url .= '?' . http_build_query($params);
@@ -70,7 +68,7 @@ class TelegramBot
 
             return $response;
         } catch (\Exception $exception) {
-            file_put_contents('query_error_log.txt', $exception->getMessage() . PHP_EOL . json_encode($exception->getTrace()));
+            file_put_contents('query_error_log.txt', $exception->getMessage());
         }
     }
 

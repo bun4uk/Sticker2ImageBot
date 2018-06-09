@@ -14,7 +14,7 @@ use Monolog\Handler\StreamHandler;
 use GuzzleHttp\Client;
 
 
-$token = file_get_contents('./config');
+$token = trim(file_get_contents('./config'));
 $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
 $log->pushHandler(new StreamHandler('./img_log.log', 200));
