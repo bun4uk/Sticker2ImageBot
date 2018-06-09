@@ -89,7 +89,7 @@ if (isset($update->message->sticker)) {
         $log->log(200, $update->message->sticker->file_id);
         $log->log(200, $filePath);
         $log->log(200, '==============');
-        $im = imagecreatefromwebp($filePath);
+        $im = imagecreatefromwebp("{$filePath}");
         $imgPath = './img_' . time() . '.png';
         imagepng($im, $imgPath);
         imagedestroy($im);
