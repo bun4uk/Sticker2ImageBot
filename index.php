@@ -22,7 +22,7 @@ $log->pushHandler(new StreamHandler('./img_log.log', 200));
 $users = [];
 
 $request = file_get_contents('php://input');
-$request = json_decode($request, TRUE);
+$request = json_decode($request);
 //if ('/bot' === $_SERVER['REQUEST_URI']) {
 //    file_put_contents('request_dump.txt', $request);
 //    file_put_contents('server_dump.html', $_SERVER);
@@ -107,4 +107,3 @@ if (isset($update->message->sticker)) {
     }
 }
 $telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
-//    }
