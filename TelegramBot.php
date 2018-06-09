@@ -61,7 +61,7 @@ class TelegramBot
         $client = new Client(['base_uri' => $url]);
         $response = $client->request('GET');
 
-        file_put_contents('query_log',json_decode($response->getBody()->getContents()));
+        file_put_contents('query_log.txt',json_decode($response->getBody()->getContents()));
 
         return json_decode($response->getBody()->getContents());
     }
