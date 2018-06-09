@@ -19,17 +19,8 @@ $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
 $log->pushHandler(new StreamHandler('./img_log.log', 200));
 
-$users = [];
-
 $request = file_get_contents('php://input');
 $request = json_decode($request);
-//if ('/bot' === $_SERVER['REQUEST_URI']) {
-    file_put_contents('request_dump.txt', $request);
-//    file_put_contents('server_dump.html', $_SERVER);
-//    file_put_contents('post_dump.html', $_POST);
-//    return true;
-//}
-
 
 $update = $request;
 
@@ -37,22 +28,6 @@ $update = $request;
 $dateNow = new DateTime('NOW');
 $msgDate = (new DateTime())->setTimestamp($update->message->date);
 $diff = $msgDate->diff(new DateTime('NOW'));
-
-
-if (!array_key_exists($update->message->chat->id, $users)) {
-    $users[$update->message->chat->id] = 1;
-} else {
-    $users[$update->message->chat->id] += 1;
-}
-
-
-if ($users[$update->message->chat->id] > 10) {
-    try {
-        $telegramApi->sendMessage($update->message->chat->id, 'It is enough for today');
-    } catch (\Exception $exception) {
-        print_r($exception->getMessage());
-    }
-}
 
 
 if (isset($update->message->text)) {
@@ -91,25 +66,19 @@ if (isset($update->message->sticker)) {
         $log->log(200, '==============');
 
 
-
         $fileName = './img_' . time();
         $imgPathWebp = $fileName . '.webp';
-        $imgPathPng = $fileName . '.png';
         copy(
             $filePath,
-            $fileName . '.webp'
+            $imgPathWebp
         );
-        $im = imagecreatefromwebp($imgPathWebp);
-        imagepng($im, $imgPathPng);
-        imagedestroy($im);
-        $telegramApi->sendPhoto($update->message->chat->id, $imgPathPng);
-
-        unlink($imgPathPng);
+        $telegramApi->sendPhoto($update->message->chat->id, $imgPathWebp);
         unlink($imgPathWebp);
+
+        return true;
 
     } catch (\Exception $exception) {
         $telegramApi->sendMessage($update->message->chat->id, 'Sorry, I am tired. Some server error. Try in a few minutes :\'( ');
-
     }
 }
 $telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
