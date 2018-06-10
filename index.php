@@ -54,10 +54,10 @@ if (isset($update->message->sticker)) {
         if (isset($update->message->chat->first_name)) {
             $log->log(200, $update->message->chat->first_name);
         }
-        if (isset($update->message->last_name)) {
+        if (isset($update->message->chat->last_name)) {
             $log->log(200, $update->message->chat->last_name);
         }
-        if (isset($update->message->username)) {
+        if (isset($update->message->chat->username)) {
             $log->log(200, $update->message->chat->username);
         }
         $log->log(200, $update->message->sticker->set_name);
