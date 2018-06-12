@@ -41,8 +41,10 @@ if (isset($update->message) && ($update->message->chat->username === 'knegrienko
 
 if (isset($update->message) && ($update->message->chat->username === 'PaulMakaron')) {
     $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
+    return true;
 }
 
 if (isset($update->message)) {
     $telegramApi->sendMessage($update->message->chat->id, 'This is a private bot');
+    return true;
 }
