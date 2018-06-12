@@ -17,7 +17,7 @@ $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
 
 try {
-    $log->pushHandler(new StreamHandler('./img_log.log', 200));
+    $log->pushHandler(new StreamHandler('./logs/img_log.log', 200));
 } catch (\Exception $exception) {
     error_log('logger exception');
 }
@@ -26,11 +26,6 @@ $request = file_get_contents('php://input');
 $request = json_decode($request);
 
 $update = $request;
-
-$dateNow = new DateTime('NOW');
-$msgDate = (new DateTime())->setTimestamp($update->message->date);
-$diff = $msgDate->diff(new DateTime('NOW'));
-
 
 if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
