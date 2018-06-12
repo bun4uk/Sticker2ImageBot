@@ -30,11 +30,10 @@ $request = json_decode($request);
 
 $update = $request;
 
-if (isset($update->message)) {
+if (isset($update->message) && ($update->message->chat->username === 'PaulMakaron')) {
     if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
 
         $telegramApi->sendMessage($update->message->chat->id, 'Приветик');
-        $telegramApi->sendMessage($update->message->chat->id, $update->message->chat->username);
         return true;
     }
     $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
