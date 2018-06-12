@@ -35,7 +35,7 @@ if (isset($update->message)) {
         $telegramApi->sendMessage($update->message->chat->id, 'Приветик');
         return true;
     }
-    $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . array_rand($dict, 1));
+    $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
     return true;
 }
 
