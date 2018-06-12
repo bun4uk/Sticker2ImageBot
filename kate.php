@@ -38,3 +38,11 @@ if (isset($update->message) && ($update->message->chat->username === 'knegrienko
     $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
     return true;
 }
+
+if (isset($update->message) && ($update->message->chat->username === 'PaulMakaron')) {
+    $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
+}
+
+if (isset($update->message)) {
+    $telegramApi->sendMessage($update->message->chat->id, 'This is a private bot');
+}
