@@ -5,3 +5,10 @@ request_dump.html
 server_dump.html
 vendor/
 config.yml
+config
+post_dump.html
+query_error_log.txt
+query_log.txt
+request_dump.txt
+token.txt
+
