@@ -7,7 +7,7 @@
  */
 
 
-$dict = explode(':', trim(file_get_contents('./dict')));
+$dict = explode(':', trim(file_get_contents('./config/kate_dict')));
 
 include 'vendor/autoload.php';
 include 'TelegramBot.php';
