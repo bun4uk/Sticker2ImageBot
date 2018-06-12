@@ -6,42 +6,35 @@
  * Time: 1:55 PM
  */
 
-include('vendor/autoload.php');
-include('TelegramBot.php');
+include 'vendor/autoload.php';
+include 'TelegramBot.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use GuzzleHttp\Client;
-
 
 $token = trim(file_get_contents('./config'));
 $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
-$log->pushHandler(new StreamHandler('./img_log.log', 200));
+
+try {
+    $log->pushHandler(new StreamHandler('./img_log.log', 200));
+} catch (\Exception $exception) {
+    error_log('logger exception');
+}
 
 $request = file_get_contents('php://input');
 $request = json_decode($request);
 
 $update = $request;
 
-
 $dateNow = new DateTime('NOW');
 $msgDate = (new DateTime())->setTimestamp($update->message->date);
 $diff = $msgDate->diff(new DateTime('NOW'));
 
 
-if (isset($update->message->text)) {
-    if (strstr($update->message->text, 'start')) {
-        try {
-            $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
-
-        } catch (\Exception $exception) {
-            print_r($exception->getMessage());
-
-        }
-    }
-
-    echo date("Y-m-d h:m:s") . ' - ' . $update->message->text . "\n";
+if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
+    $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
+    return true;
 }
 if (isset($update->message->sticker)) {
     try {
