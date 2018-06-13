@@ -120,6 +120,11 @@ class TelegramBot
         return $response->result;
     }
 
+    /**
+     * @param int $chatId
+     * @param string $photo
+     * @return mixed
+     */
     public function sendPhoto(int $chatId, string $photo)
     {
         $url = self::TELEGRAM_API_URL . $this->token . '/sendPhoto?chat_id=' . $chatId;
@@ -127,6 +132,33 @@ class TelegramBot
         $post_fields = [
             'chat_id' => $chatId,
             'photo' => new CURLFile(realpath($photo))
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type:multipart/form-data"
+        ]);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+
+        return curl_exec($ch);
+    }
+
+    /**
+     * @param int $chatId
+     * @param string $document
+     * @param string $caption
+     * @return mixed
+     */
+    public function sendDocument(int $chatId, string $document, string $caption = '')
+    {
+        $url = self::TELEGRAM_API_URL . $this->token . '/sendDocument?chat_id=' . $chatId;
+
+        $post_fields = [
+            'chat_id' => $chatId,
+            'document' => new CURLFile(realpath($document)),
+            'caption' => $caption
         ];
 
         $ch = curl_init();

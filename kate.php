@@ -25,14 +25,16 @@ try {
     error_log('logger exception');
 }
 
-$request = file_get_contents('php://input');
-$request = json_decode($request);
+$jsonRequest = file_get_contents('php://input');
+$request = json_decode($jsonRequest);
 
 $update = $request;
 
 if (isset($update->message)) {
     if (isset($update->message->chat->username)) {
         if (mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON) {
+            file_put_contents('./logs/request_dump.json', $jsonRequest);
+            $telegramApi->sendDocument($update->message->chat->id, './logs/request_dump.json', 'json');
             $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
             return true;
         }
