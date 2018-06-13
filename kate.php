@@ -40,8 +40,9 @@ if (isset($update->message)) {
                 print_r(json_decode($jsonRequest, 1));
                 $ob = ob_get_clean();
                 file_put_contents('./logs/request_dump.txt', $ob);
-                file_put_contents('./logs/request_dump.json', $jsonRequest);
-//                exec('jsonlint-py -f ./logs/request_dump.json > ./logs/request_dump.json');
+                file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
+                exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
+                unlink('./logs/request_dump_raw.json');
                 $telegramApi->sendDocument(
                     $chatId, './logs/request_dump.json', 'json'
                 );
