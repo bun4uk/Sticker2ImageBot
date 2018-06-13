@@ -35,14 +35,12 @@ if (isset($update->message)) {
 
     if (isset($update->message->chat->username)) {
         if (mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON) {
-
             if (false !== strpos($update->message->text, 'debug')) {
                 file_put_contents('./logs/request_dump.json', $jsonRequest);
                 $telegramApi->sendDocument(
                     $chatId, './logs/request_dump.json', 'json'
                 );
             }
-
             $telegramApi->sendMessage($chatId, 'Привет, нащяльникэ');
             return true;
         }
