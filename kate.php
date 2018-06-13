@@ -6,11 +6,11 @@
  * Time: 7:30 PM
  */
 
-
 $dict = explode(':', trim(file_get_contents('./config/kate_dict')));
 
 include 'vendor/autoload.php';
 include 'TelegramBot.php';
+include 'Dictionary.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -30,21 +30,23 @@ $request = json_decode($request);
 
 $update = $request;
 
-if (isset($update->message) && ($update->message->chat->username === 'knegrienko')) {
-    if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
-        $telegramApi->sendMessage($update->message->chat->id, 'Приветик');
-        return true;
-    }
-    $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
-    return true;
-}
-
-if (isset($update->message) && ($update->message->chat->username === 'PaulMakaron')) {
-    $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
-    return true;
-}
-
 if (isset($update->message)) {
+    if (isset($update->message->chat->username)) {
+        if (mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON) {
+            $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
+            return true;
+        }
+
+        if (mb_strtolower($update->message->chat->username) === Dictionary::KNEGRIENKO) {
+            if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
+                $telegramApi->sendMessage($update->message->chat->id, 'Приветик');
+                return true;
+            }
+            $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
+            return true;
+        }
+
+    }
     $telegramApi->sendMessage($update->message->chat->id, 'This is a private bot');
     return true;
 }
