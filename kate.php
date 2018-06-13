@@ -34,24 +34,23 @@ if (isset($update->message)) {
     $chatId = $update->message->chat->id;
 
     if (isset($update->message->chat->username)) {
-        if (false !== strpos($update->message->text, 'debug')) {
-            ob_start();
-            print_r(json_decode($jsonRequest, 1));
-            $ob = ob_get_clean();
-            file_put_contents('./logs/request_dump.txt', $ob);
-            file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
-            exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
-            unlink('./logs/request_dump_raw.json');
-            $telegramApi->sendDocument(
-                $chatId, './logs/request_dump.json', 'json'
-            );
-            $telegramApi->sendDocument(
-                $chatId, './logs/request_dump.txt', 'txt'
-            );
-            return true;
-        }
-
         if (mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON) {
+            if (false !== strpos($update->message->text, 'debug')) {
+                ob_start();
+                print_r(json_decode($jsonRequest, 1));
+                $ob = ob_get_clean();
+                file_put_contents('./logs/request_dump.txt', $ob);
+                file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
+                exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
+                unlink('./logs/request_dump_raw.json');
+                $telegramApi->sendDocument(
+                    $chatId, './logs/request_dump.json', 'json'
+                );
+                $telegramApi->sendDocument(
+                    $chatId, './logs/request_dump.txt', 'txt'
+                );
+                return true;
+            }
             $telegramApi->sendMessage($chatId, 'Привет, нащяльникэ');
             return true;
         }
