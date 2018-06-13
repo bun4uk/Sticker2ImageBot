@@ -31,24 +31,32 @@ $request = json_decode($jsonRequest);
 $update = $request;
 
 if (isset($update->message)) {
+    $chatId = $update->message->chat->id;
+
     if (isset($update->message->chat->username)) {
         if (mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON) {
-            file_put_contents('./logs/request_dump.json', $jsonRequest);
-            $telegramApi->sendDocument($update->message->chat->id, './logs/request_dump.json', 'json');
-            $telegramApi->sendMessage($update->message->chat->id, 'Привет, нащяльникэ');
+
+            if (false !== strpos($update->message->text, 'debug')) {
+                file_put_contents('./logs/request_dump.json', $jsonRequest);
+                $telegramApi->sendDocument(
+                    $chatId, './logs/request_dump.json', 'json'
+                );
+            }
+
+            $telegramApi->sendMessage($chatId, 'Привет, нащяльникэ');
             return true;
         }
 
         if (mb_strtolower($update->message->chat->username) === Dictionary::KNEGRIENKO) {
             if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
-                $telegramApi->sendMessage($update->message->chat->id, 'Приветик');
+                $telegramApi->sendMessage($chatId, 'Приветик');
                 return true;
             }
-            $telegramApi->sendMessage($update->message->chat->id, 'Катюш, ' . $dict[array_rand($dict, 1)]);
+            $telegramApi->sendMessage($chatId, 'Катюш, ' . $dict[array_rand($dict, 1)]);
             return true;
         }
 
     }
-    $telegramApi->sendMessage($update->message->chat->id, 'This is a private bot');
+    $telegramApi->sendMessage($chatId, 'This is a private bot');
     return true;
 }

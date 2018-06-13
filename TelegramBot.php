@@ -97,12 +97,12 @@ class TelegramBot
      * @param string $text
      * @return stdClass
      */
-    public function sendMessage(int $chat_id = 0, string $text): stdClass
+    public function sendMessage(int $chatId = 0, string $text): stdClass
     {
         try {
             $response = $this->query('sendMessage', [
                 'text' => $text,
-                'chat_id' => $chat_id
+                'chat_id' => $chatId
             ]);
         } catch (GuzzleException $exception) {
             $this->log->log(400, 'Guzzle sendMessage error');
