@@ -12,3 +12,4 @@ query_log.txt
 request_dump.txt
 token.txt
 config_kate
+logs/
