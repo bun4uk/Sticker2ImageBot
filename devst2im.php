@@ -12,7 +12,7 @@ include 'TelegramBot.php';
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-$token = trim(file_get_contents('./config/sticker2img'));
+$token = trim(file_get_contents('./config/dev'));
 $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
 
