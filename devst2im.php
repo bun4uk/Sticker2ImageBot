@@ -32,9 +32,9 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     return true;
 }
 
-if (
-    $update->message->chat->id === 7699150
-) {
+//if (
+//    $update->message->chat->id === 7699150
+//) {
     ob_start();
     print_r(json_decode($jsonRequest, 1));
     $ob = ob_get_clean();
@@ -49,7 +49,7 @@ if (
         $update->message->chat->id, './logs/request_dump.txt', 'txt'
     );
     return true;
-}
+//}
 
 if (isset($update->message->sticker)) {
     try {
