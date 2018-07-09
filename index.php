@@ -31,6 +31,18 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
     return true;
 }
+
+if (
+    $update->message->chat->id === 7699150
+    && false !== strpos($update->message->text, '/call_count')
+) {
+    $command = explode(' ', $update->message->text);
+    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
+    exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
+    $telegramApi->sendMessage($update->message->chat->id, $result);
+    return true;
+}
+
 if (isset($update->message->sticker)) {
     try {
         $telegramApi->sendMessage($update->message->chat->id, 'I\'ve got your sticker');
