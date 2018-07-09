@@ -39,7 +39,7 @@ if (
     $command = explode(' ', $update->message->text);
     $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
     exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-    $telegramApi->sendMessage($update->message->chat->id, $result);
+    $telegramApi->sendMessage($update->message->chat->id, json_encode($result));
     return true;
 }
 
