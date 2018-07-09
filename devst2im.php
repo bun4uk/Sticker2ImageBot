@@ -36,12 +36,6 @@ if (
     $update->message->chat->id === 7699150
     && false !== strpos($update->message->text, '/call_count')
 ) {
-
-    $command = explode(' ', $update->message->text);
-    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
-    exec("cat logs/img_log.log | grep === | grep {$date}", $result);
-    $telegramApi->sendMessage($update->message->chat->id, $result);
-
     ob_start();
     print_r(json_decode($jsonRequest, 1));
     $ob = ob_get_clean();
@@ -52,6 +46,11 @@ if (
         $update->message->chat->id, './logs/request_dump.json', 'json'
     );
     unlink('./logs/request_dump.json');
+
+    $command = explode(' ', $update->message->text);
+    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
+    exec("cat logs/img_log.log | grep === | grep {$date}", $result);
+    $telegramApi->sendMessage($update->message->chat->id, $result);
     return true;
 }
 
