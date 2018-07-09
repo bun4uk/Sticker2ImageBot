@@ -22,8 +22,8 @@ try {
     error_log('logger exception');
 }
 
-$request = file_get_contents('php://input');
-$request = json_decode($request);
+$jsonRequest = file_get_contents('php://input');
+$request = json_decode($jsonRequest);
 
 $update = $request;
 
