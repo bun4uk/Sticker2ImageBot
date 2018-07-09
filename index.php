@@ -55,8 +55,7 @@ if (isset($update->message->sticker)) {
         $log->log(200, $filePath);
         $log->log(200, '==============');
 
-
-        $fileName = './img_' . time();
+        $fileName = './img_' . time() . mt_rand();
         $imgPathWebp = $fileName . '.webp';
         copy(
             $filePath,
