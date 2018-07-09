@@ -87,4 +87,6 @@ if (
     return true;
 }
 
-$telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
+if (isset($update->message->chat->id)) {
+    $telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
+}
