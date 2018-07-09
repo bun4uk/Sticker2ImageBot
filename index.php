@@ -77,7 +77,7 @@ if (isset($update->message->sticker)) {
 
 if (
     isset($update->message)
-    && $update->message->chat->id === 7699150
+    && mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON
     && false !== strpos($update->message->text, '/call_count')
 ) {
     $command = explode(' ', $update->message->text);
