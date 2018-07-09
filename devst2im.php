@@ -13,11 +13,11 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 $token = trim(file_get_contents('./config/dev'));
-$log = new Logger('img_log');
+$log = new Logger('dev_img_log');
 $telegramApi = new TelegramBot($token, $log);
 
 try {
-    $log->pushHandler(new StreamHandler('./logs/img_log.log', 200));
+    $log->pushHandler(new StreamHandler('./logs/dev_img_log.log', 200));
 } catch (\Exception $exception) {
     error_log('logger exception');
 }
@@ -31,6 +31,26 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
     return true;
 }
+
+if (
+    $update->message->chat->id === 7699150
+) {
+    ob_start();
+    print_r(json_decode($jsonRequest, 1));
+    $ob = ob_get_clean();
+    file_put_contents('./logs/request_dump.txt', $ob);
+    file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
+    exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
+    unlink('./logs/request_dump_raw.json');
+    $telegramApi->sendDocument(
+        $update->message->chat->id, './logs/request_dump.json', 'json'
+    );
+    $telegramApi->sendDocument(
+        $update->message->chat->id, './logs/request_dump.txt', 'txt'
+    );
+    return true;
+}
+
 if (isset($update->message->sticker)) {
     try {
         $telegramApi->sendMessage($update->message->chat->id, 'I\'ve got your sticker');
