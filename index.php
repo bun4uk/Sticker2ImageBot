@@ -33,8 +33,8 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
 }
 
 if (
-    $update->message &&
-    $update->message->chat->id === 7699150
+    isset($update->message)
+    && $update->message->chat->id === 7699150
     && false !== strpos($update->message->text, '/call_count')
 ) {
     $command = explode(' ', $update->message->text);
