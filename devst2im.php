@@ -41,7 +41,7 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     file_put_contents('./logs/request_dump.txt', $ob);
     file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
     exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
-    unlink('./logs/request_dump_raw.json');
+//    unlink('./logs/request_dump_raw.json');
     $telegramApi->sendDocument(
         $update->message->chat->id, './logs/request_dump.json', 'json'
     );
