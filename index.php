@@ -7,6 +7,7 @@
  */
 
 include 'vendor/autoload.php';
+include 'Dictionary.php';
 include 'TelegramBot.php';
 
 use Monolog\Logger;
