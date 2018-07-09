@@ -32,18 +32,6 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     return true;
 }
 
-if (
-    isset($update->message)
-    && $update->message->chat->id === 7699150
-    && false !== strpos($update->message->text, '/call_count')
-) {
-    $command = explode(' ', $update->message->text);
-    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
-    exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-    $telegramApi->sendMessage($update->message->chat->id, json_encode($result));
-    return true;
-}
-
 if (isset($update->message->sticker)) {
     try {
         $telegramApi->sendMessage($update->message->chat->id, 'I\'ve got your sticker');
@@ -86,4 +74,17 @@ if (isset($update->message->sticker)) {
         $log->log(404, '===============');
     }
 }
+
+if (
+    isset($update->message)
+    && $update->message->chat->id === 7699150
+    && false !== strpos($update->message->text, '/call_count')
+) {
+    $command = explode(' ', $update->message->text);
+    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
+    exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
+    $telegramApi->sendMessage($update->message->chat->id, json_encode($result));
+    return true;
+}
+
 $telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
