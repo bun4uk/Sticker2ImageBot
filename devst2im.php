@@ -32,24 +32,28 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     return true;
 }
 
-//if (
-//    $update->message->chat->id === 7699150
-//) {
+if (
+    $update->message->chat->id === 7699150
+    && false !== strpos($update->message->text, '/call_count')
+) {
+
+    $command = explode(' ', $update->message->text);
+    $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
+    exec("cat logs/img_log.log | grep === | grep {$date}", $result);
+    $telegramApi->sendMessage($update->message->chat->id, $result);
+
     ob_start();
     print_r(json_decode($jsonRequest, 1));
     $ob = ob_get_clean();
-    file_put_contents('./logs/request_dump.txt', $ob);
     file_put_contents('./logs/request_dump_raw.json', $jsonRequest);
     exec('jsonlint-py -f ./logs/request_dump_raw.json > ./logs/request_dump.json');
-//    unlink('./logs/request_dump_raw.json');
+    unlink('./logs/request_dump_raw.json');
     $telegramApi->sendDocument(
         $update->message->chat->id, './logs/request_dump.json', 'json'
     );
-    $telegramApi->sendDocument(
-        $update->message->chat->id, './logs/request_dump.txt', 'txt'
-    );
+    unlink('./logs/request_dump.json');
     return true;
-//}
+}
 
 if (isset($update->message->sticker)) {
     try {
