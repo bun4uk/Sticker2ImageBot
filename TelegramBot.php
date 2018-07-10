@@ -72,25 +72,27 @@ class TelegramBot
         }
     }
 
-    /**
-     * @return stdClass
-     */
-    public function getUpdates(): stdClass
-    {
-        $response = [];
-        try {
-            $response = $this->query('getUpdates', [
-                'offset' => $this->offset + 1
-            ]);
-            if (!empty($response->result)) {
-                $this->offset = $response->result[count($response->result) - 1]->update_id;
-            }
-        } catch (GuzzleException $exception) {
-            $this->log->log(400, 'Guzzle sendMessage error');
-        }
-
-        return $response;
-    }
+//    /**
+//     * @return stdClass
+//     */
+//    public function getUpdates(): object
+//    {
+//        $response = new stdClass();
+//        try {
+//            $response = $this->query('getUpdates', [
+//                'offset' => $this->offset + 1
+//            ]);
+//            if (!empty($response->result)) {
+//                $this->offset = $response->result[count($response->result) - 1]->update_id;
+//            }
+//
+////            if()
+//        } catch (GuzzleException $exception) {
+//            $this->log->log(400, 'Guzzle sendMessage error');
+//        }
+//
+//        return $response;
+//    }
 
     /**
      * @param int $chat_id
