@@ -28,13 +28,6 @@ $request = json_decode($request);
 
 $update = $request;
 
-if (isset($update->message) && $update->message->chat->id === 211210731) {
-    $log->log(200, '----------------');
-    $log->log(200, 'Blocked spammer' . $update->message->chat->id);
-    $log->log(200, '----------------');
-    return true;
-}
-
 if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
     return true;
