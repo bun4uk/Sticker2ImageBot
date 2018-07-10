@@ -33,6 +33,12 @@ if (isset($update->message->text) && false !== strpos($update->message->text, 's
     return true;
 }
 
+//211210731
+
+if (isset($update->message) && $update->message->chat->id === 211210731) {
+    $telegramApi->sendMessage($update->message->chat->id, 'Enough for today');
+}
+
 if (isset($update->message->sticker)) {
     try {
         $telegramApi->sendMessage($update->message->chat->id, 'I\'ve got your sticker');
