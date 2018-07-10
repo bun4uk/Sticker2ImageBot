@@ -76,7 +76,7 @@ if (isset($update->message->sticker)) {
 }
 
 if (
-    isset($update->message)
+    isset($update->message, $update->message->chat->username)
     && mb_strtolower($update->message->chat->username) === Dictionary::PAULMAKARON
     && false !== strpos($update->message->text, '/call_count')
 ) {
