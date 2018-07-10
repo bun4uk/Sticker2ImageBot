@@ -53,8 +53,9 @@ class TelegramBot
      * @return stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function query(string $method, array $params = []): stdClass
+    protected function query(string $method, array $params = []): object
     {
+        $response = new stdClass();
         try {
             $url = self::TELEGRAM_API_URL . $this->token . '/' . $method;
             if (!empty($params)) {
@@ -65,11 +66,11 @@ class TelegramBot
             $result = $client->request('GET');
 
             $response = json_decode($result->getBody()->getContents());
-
-            return $response;
         } catch (\Exception $exception) {
             file_put_contents('query_error_log.txt', $exception->getMessage());
         }
+
+        return $response;
     }
 
 //    /**
@@ -95,12 +96,13 @@ class TelegramBot
 //    }
 
     /**
-     * @param int $chat_id
+     * @param int $chatId
      * @param string $text
      * @return stdClass
      */
-    public function sendMessage(int $chatId = 0, string $text): stdClass
+    public function sendMessage(int $chatId = 0, string $text): object
     {
+        $response = new stdClass();
         try {
             $response = $this->query('sendMessage', [
                 'text' => $text,
@@ -113,7 +115,7 @@ class TelegramBot
         return $response;
     }
 
-    public function getFile($file): stdClass
+    public function getFile($file): object
     {
         $response = $this->query('getFile', [
             'file_id' => $file->file_id
