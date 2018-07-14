@@ -6,6 +6,8 @@
  * Time: 1:55 PM
  */
 
+date_default_timezone_set('Europe/Kiev');
+
 include 'vendor/autoload.php';
 include 'Dictionary.php';
 include 'TelegramBot.php';
