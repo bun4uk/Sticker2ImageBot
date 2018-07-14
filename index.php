@@ -85,7 +85,7 @@ if (
     $command = explode(' ', $update->message->text);
     $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
     exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-    $telegramApi->sendMessage($update->message->chat->id, json_encode($result));
+    $telegramApi->sendMessage(7699150,  'Вчера бот был использован '. reset($result) . ' раз(а)');
     return true;
 }
 

@@ -18,6 +18,6 @@ $telegramApi = new TelegramBot($token, $log);
 
 $date = (new \DateTime('yesterday'))->format('Y-m-d');
 exec('cat ' . __DIR__ . "/logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-$telegramApi->sendMessage(7699150, reset($result));
+$telegramApi->sendMessage(7699150,  'Вчера бот был использован '. reset($result) . ' раз(а)');
 return true;
 
