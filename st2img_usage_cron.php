@@ -21,6 +21,6 @@ $telegramApi = new TelegramBot($token, $log);
 $date = (new \DateTime())->format('Y-m-d');
 
 exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-$telegramApi->sendMessage(7699150, json_encode($result));
+$telegramApi->sendMessage(7699150, reset($result));
 return true;
 
