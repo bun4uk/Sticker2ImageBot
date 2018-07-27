@@ -8,16 +8,24 @@
 
 date_default_timezone_set('Europe/Kiev');
 
-include 'vendor/autoload.php';
-include 'Dictionary.php';
-include 'TelegramBot.php';
+require_once 'vendor/autoload.php';
+require_once 'Dictionary.php';
+require_once 'TelegramBot.php';
+require_once 'Database.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-$token = trim(file_get_contents('./config/sticker2img'));
+$config = parse_ini_file('./config/config.ini');
+$token = $config['telegram_api_token'];
 $log = new Logger('img_log');
 $telegramApi = new TelegramBot($token, $log);
+$db = new Database([
+    'db_host' => $config['db_host'],
+    'db_name' => $config['db_name'],
+    'db_user' => $config['db_user'],
+    'db_password' => $config['db_password'],
+]);
 
 try {
     $log->pushHandler(new StreamHandler('./logs/img_log.log', 200));
@@ -29,6 +37,15 @@ $request = file_get_contents('php://input');
 $request = json_decode($request);
 
 $update = $request;
+if (!$db->userExists($update->message->chat->id)) {
+    $db->saveUser([
+        'chat_id' => $update->message->chat->id,
+        'username' => $update->message->chat->username ?? null,
+        'type' => $update->message->chat->type ?? null
+    ]);
+
+    $telegramApi->sendMessage(7699150, 'New user @' . $update->message->chat->username ?? null);
+}
 
 if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
@@ -54,8 +71,15 @@ if (isset($update->message->sticker)) {
         }
         $log->log(200, $update->message->sticker->set_name);
         $log->log(200, $update->message->sticker->file_id);
-        $log->log(200, $filePath);
+        $log->log(200, $file->file_path);
         $log->log(200, '==============');
+
+        $db->saveAction([
+            'chat_id' => $update->message->chat->id,
+            'set_name' => $update->message->sticker->set_name,
+            'file_id' => $update->message->sticker->file_id,
+            'file_path' => $file->file_path
+        ]);
 
         $fileName = './img_' . time() . mt_rand();
         $imgPathWebp = $fileName . '.webp';
@@ -85,7 +109,7 @@ if (
     $command = explode(' ', $update->message->text);
     $date = (isset($command[1]) && !empty($command[1])) ? $command[1] : (new \DateTime())->format('Y-m-d');
     exec("cat logs/img_log.log | grep === | grep {$date} | wc -l", $result);
-    $telegramApi->sendMessage(7699150,  'Бот был использован '. reset($result) . ' раз');
+    $telegramApi->sendMessage(7699150, 'Бот был использован ' . reset($result) . ' раз');
     return true;
 }
 
