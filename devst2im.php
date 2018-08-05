@@ -6,8 +6,12 @@
  * Time: 1:55 PM
  */
 
+date_default_timezone_set('Europe/Kiev');
+
 include 'vendor/autoload.php';
+include 'Dictionary.php';
 include 'TelegramBot.php';
+include 'Database.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -15,6 +19,7 @@ use Monolog\Handler\StreamHandler;
 $token = trim(file_get_contents('./config/dev'));
 $log = new Logger('dev_img_log');
 $telegramApi = new TelegramBot($token, $log);
+$db = new Database();
 
 try {
     $log->pushHandler(new StreamHandler('./logs/dev_img_log.log', 200));
@@ -22,10 +27,16 @@ try {
     error_log('logger exception');
 }
 
-$jsonRequest = file_get_contents('php://input');
-$request = json_decode($jsonRequest);
+$request = file_get_contents('php://input');
+$request = json_decode($request);
 
 $update = $request;
+
+$db->setUser([
+    'chat_id' => $update->message->chat->id,
+    'username' => $update->message->chat->username ?? null,
+    'type' => $update->message->chat->type ?? null
+]);
 
 if (isset($update->message->text) && false !== strpos($update->message->text, 'start')) {
     $telegramApi->sendMessage($update->message->chat->id, 'Hi there! I\'m Sticker2Image bot. I\'ll help you to convert your stickers to PNG images. Just send me some sticker.');
@@ -76,7 +87,6 @@ if (isset($update->message->sticker)) {
         $log->log(200, $filePath);
         $log->log(200, '==============');
 
-
         $fileName = './img_' . time() . mt_rand();
         $imgPathWebp = $fileName . '.webp';
         copy(
@@ -96,4 +106,7 @@ if (isset($update->message->sticker)) {
         $log->log(404, '===============');
     }
 }
-$telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
+
+if (isset($update->message, $update->message->chat->id)) {
+    $telegramApi->sendMessage($update->message->chat->id, 'I understand only stickers');
+}
